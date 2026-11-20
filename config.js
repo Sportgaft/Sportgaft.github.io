@@ -1,5 +1,4 @@
 window.SITE_CONFIG = {
-  "botUsername": "Sportgeftbot",
   "metaPixelId": "",
   "webhook": "",
   "colors": {
@@ -13,6 +12,14 @@ window.SITE_CONFIG = {
     "field": "#faf6e6"
   },
   "texts": {
+    "doneSub": "دوس على حساب الدعم عشان تستلم هديتك",
+    "supportBtn": "💬 كلّم الدعم",
+    "msgHello": "مرحبا، أنا {name}",
+    "msgGiftLabel": "الهدية",
+    "msgGiftValue": "200 جنيه",
+    "msgTypeLabel": "نوع الهدية",
+    "msgAnswerLabel": "الرد",
+    "copyNote": "الرسالة اتنسخت تلقائياً. لو ما ظهرتش في المحادثة، الصقها وابعتها",
     "pageTitle": "هدية ترحيبية",
     "nameTitle": "اسمك إيه؟",
     "namePlaceholder": "اكتب اسمك هنا",
@@ -27,7 +34,7 @@ window.SITE_CONFIG = {
     "question": "تحب تستلمها؟",
     "answerDefault": "نعم",
     "sendBtn": "إرسال",
-    "doneTitle": "تمام يا {name}!",
-    "doneSub": "دوس على البوت عشان تستلم هديتك"
-  }
+    "doneTitle": "تمام يا {name}!"
+  },
+  "supportUsername": "@SOOED1"
 };
