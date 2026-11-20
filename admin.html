@@ -27,7 +27,7 @@ small{color:var(--muted)}
 <script src="config.js"></script>
 <script>/*fallback*/(function(){if(window.SITE_CONFIG)return;
 window.SITE_CONFIG = {
-  "botUsername": "arba777promobot",
+  "supportUsername": "",
   "metaPixelId": "",
   "webhook": "",
   "colors": {
@@ -50,7 +50,14 @@ window.SITE_CONFIG = {
     "answerDefault": "نعم",
     "sendBtn": "إرسال",
     "doneTitle": "تمام يا {name}!",
-    "doneSub": "دوس على البوت عشان تستلم هديتك"
+    "doneSub": "دوس على حساب الدعم عشان تستلم هديتك",
+    "supportBtn": "💬 كلّم الدعم",
+    "msgHello": "مرحبا، أنا {name}",
+    "msgGiftLabel": "الهدية",
+    "msgGiftValue": "200 جنيه",
+    "msgTypeLabel": "نوع الهدية",
+    "msgAnswerLabel": "الرد",
+    "copyNote": "الرسالة اتنسخت تلقائياً. لو ما ظهرتش في المحادثة، الصقها وابعتها"
   }
 };
 })();</script>
@@ -60,7 +67,7 @@ window.SITE_CONFIG = {
 <div>
   <div class="card"><h1>لوحة التحكم</h1><small>عدّل أي شي وشوف المعاينة، وبعدها انشر على GitHub أو حمّل الملف.</small>
     <h2 style="margin-top:16px">البوت والتتبع</h2>
-    <label>يوزر البوت (بدون @)</label><input type="text" data-k="botUsername" dir="ltr">
+    <label>يوزر حساب الدعم على تيليجرام (بدون @)</label><input type="text" data-k="supportUsername" dir="ltr" placeholder="username">
     <label>Meta Pixel ID (اختياري)</label><input type="text" data-k="metaPixelId" dir="ltr">
     <label>Webhook لحفظ البيانات (اختياري)</label><input type="text" data-k="webhook" dir="ltr">
   </div>
@@ -84,7 +91,12 @@ window.SITE_CONFIG = {
 const $=id=>document.getElementById(id);
 let cfg=JSON.parse(JSON.stringify(window.SITE_CONFIG));
 try{const d=localStorage.getItem("cfg_preview");if(d)cfg=JSON.parse(d)}catch(e){}
-const labels={bg1:"خلفية 1",bg2:"خلفية 2",card:"لون الكارت",ink:"لون الخط",muted:"خط ثانوي",accent:"اللون الرئيسي (الأزرار)",line:"الحدود",field:"خلفية الحقول",
+delete cfg.botUsername;
+const defT={doneSub:"دوس على حساب الدعم عشان تستلم هديتك",supportBtn:"💬 كلّم الدعم",msgHello:"مرحبا، أنا {name}",msgGiftLabel:"الهدية",msgGiftValue:"200 جنيه",msgTypeLabel:"نوع الهدية",msgAnswerLabel:"الرد",copyNote:"الرسالة اتنسخت تلقائياً. لو ما ظهرتش في المحادثة، الصقها وابعتها"};
+cfg.texts=Object.assign({},defT,cfg.texts);
+if(cfg.texts.doneSub.includes("البوت"))cfg.texts.doneSub=defT.doneSub;
+if(cfg.supportUsername===undefined)cfg.supportUsername="";
+const labels={copyNote:"ملاحظة تحت الرسالة",supportBtn:"زر الدعم",msgHello:"رسالة الدعم: السطر الأول",msgGiftLabel:"رسالة الدعم: عنوان الهدية",msgGiftValue:"رسالة الدعم: قيمة الهدية",msgTypeLabel:"رسالة الدعم: عنوان نوع الهدية",msgAnswerLabel:"رسالة الدعم: عنوان الرد",bg1:"خلفية 1",bg2:"خلفية 2",card:"لون الكارت",ink:"لون الخط",muted:"خط ثانوي",accent:"اللون الرئيسي (الأزرار)",line:"الحدود",field:"خلفية الحقول",
 pageTitle:"عنوان الصفحة",nameTitle:"سؤال الاسم",namePlaceholder:"placeholder الاسم",nextBtn:"زر التالي",nameError:"رسالة خطأ الاسم",welcome:"ترحيب + اختيار الهدية",optionA:"الخيار الأول",optionB:"الخيار الثاني",offerBefore:"العرض: قبل الرقم",offerHighlight:"العرض: الجزء الملون",offerAfter:"العرض: بعد الرقم",question:"السؤال",answerDefault:"الإجابة الافتراضية",sendBtn:"زر الإرسال",doneTitle:"عنوان الخطوة الأخيرة",doneSub:"نص تحت العنوان"};
 let t;function changed(){try{localStorage.setItem("cfg_preview",JSON.stringify(cfg))}catch(e){}clearTimeout(t);t=setTimeout(()=>$("frame").contentWindow.location.reload(),400)}
 function mk(group,k,type){const w=document.createElement("div");const l=document.createElement("label");l.textContent=labels[k];const i=document.createElement("input");i.type=type;i.value=cfg[group][k];
