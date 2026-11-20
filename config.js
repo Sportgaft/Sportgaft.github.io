@@ -1,5 +1,5 @@
 window.SITE_CONFIG = {
-  "botUsername": "arba777promobot",
+  "botUsername": "Sportgeftbot",
   "metaPixelId": "",
   "webhook": "",
   "colors": {
