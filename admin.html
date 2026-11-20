@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>لوحة التحكم</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f1e4;--card:#fcfbf6;--ink:#0f3b33;--muted:#6b7f79;--accent:#0b8580;--line:#bfe0d8}
+*{box-sizing:border-box}
+body{margin:0;font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;background:var(--bg);color:var(--ink);padding:16px}
+.wrap{max-width:1000px;margin:auto;display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:900px){.wrap{grid-template-columns:1.2fr 1fr}.prev{position:sticky;top:16px;align-self:start}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px}
+h1{font-size:22px;margin:0 0 14px}h2{font-size:17px;margin:0 0 12px}
+label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
+input[type=text],input[type=password]{width:100%;font:inherit;padding:11px 13px;border:1.5px solid var(--line);border-radius:14px;background:#fff;color:var(--ink)}
+input[type=color]{width:100%;height:42px;border:1.5px solid var(--line);border-radius:14px;background:#fff;padding:3px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+button{font:inherit;font-weight:600;border:0;border-radius:16px;padding:13px 16px;cursor:pointer;background:var(--accent);color:#fff}
+button.alt{background:#fff;color:var(--ink);border:1.5px solid var(--line)}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+iframe{width:100%;height:560px;border:1px solid var(--line);border-radius:22px;background:#fff}
+#msg{margin-top:10px;font-size:14px;min-height:20px}
+small{color:var(--muted)}
+</style>
+<script src="config.js"></script>
+<script>/*fallback*/(function(){if(window.SITE_CONFIG)return;
+window.SITE_CONFIG = {
+  "botUsername": "arba777promobot",
+  "metaPixelId": "",
+  "webhook": "",
+  "colors": {
+    "bg1": "#fbefd9", "bg2": "#d9ece6", "card": "#fcfbf6", "ink": "#0f3b33",
+    "muted": "#6b7f79", "accent": "#0b8580", "line": "#bfe0d8", "field": "#faf6e6"
+  },
+  "texts": {
+    "pageTitle": "هدية ترحيبية",
+    "nameTitle": "اسمك إيه؟",
+    "namePlaceholder": "اكتب اسمك هنا",
+    "nextBtn": "التالي",
+    "nameError": "اكتب اسمك من فضلك",
+    "welcome": "أهلاً {name}! اختار هديتك الترحيبية",
+    "optionA": "🎰 بونص كازينو",
+    "optionB": "⚽ بونص سبورت",
+    "offerBefore": "شركة أربح بتقدّم للمشتركين الجداد",
+    "offerHighlight": "200 جنيه",
+    "offerAfter": "هدية",
+    "question": "تحب تستلمها؟",
+    "answerDefault": "نعم",
+    "sendBtn": "إرسال",
+    "doneTitle": "تمام يا {name}!",
+    "doneSub": "دوس على البوت عشان تستلم هديتك"
+  }
+};
+})();</script>
+</head>
+<body>
+<div class="wrap">
+<div>
+  <div class="card"><h1>لوحة التحكم</h1><small>عدّل أي شي وشوف المعاينة، وبعدها انشر على GitHub أو حمّل الملف.</small>
+    <h2 style="margin-top:16px">البوت والتتبع</h2>
+    <label>يوزر البوت (بدون @)</label><input type="text" data-k="botUsername" dir="ltr">
+    <label>Meta Pixel ID (اختياري)</label><input type="text" data-k="metaPixelId" dir="ltr">
+    <label>Webhook لحفظ البيانات (اختياري)</label><input type="text" data-k="webhook" dir="ltr">
+  </div>
+  <div class="card" style="margin-top:16px"><h2>الألوان</h2><div class="grid" id="colors"></div></div>
+  <div class="card" style="margin-top:16px"><h2>النصوص</h2><small>استخدم {name} مكان اسم الشخص.</small><div id="texts"></div></div>
+  <div class="card" style="margin-top:16px"><h2>النشر على GitHub</h2>
+    <div class="grid">
+      <div><label>المستخدم (owner)</label><input type="text" id="gOwner" dir="ltr"></div>
+      <div><label>اسم الريبو</label><input type="text" id="gRepo" dir="ltr"></div>
+      <div><label>الفرع</label><input type="text" id="gBranch" dir="ltr" value="main"></div>
+      <div><label>مسار الملف</label><input type="text" id="gPath" dir="ltr" value="config.js"></div>
+    </div>
+    <label>GitHub Token (صلاحية Contents: write على الريبو فقط)</label><input type="password" id="gToken" dir="ltr">
+    <div class="row"><button id="pub">نشر التعديلات</button><button class="alt" id="dl">تحميل config.js</button><button class="alt" id="reset">رجوع للإعدادات المنشورة</button></div>
+    <div id="msg"></div>
+  </div>
+</div>
+<div class="prev"><div class="card"><h2>معاينة مباشرة</h2><iframe id="frame" src="index.html?preview=1"></iframe></div></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+let cfg=JSON.parse(JSON.stringify(window.SITE_CONFIG));
+try{const d=localStorage.getItem("cfg_preview");if(d)cfg=JSON.parse(d)}catch(e){}
+const labels={bg1:"خلفية 1",bg2:"خلفية 2",card:"لون الكارت",ink:"لون الخط",muted:"خط ثانوي",accent:"اللون الرئيسي (الأزرار)",line:"الحدود",field:"خلفية الحقول",
+pageTitle:"عنوان الصفحة",nameTitle:"سؤال الاسم",namePlaceholder:"placeholder الاسم",nextBtn:"زر التالي",nameError:"رسالة خطأ الاسم",welcome:"ترحيب + اختيار الهدية",optionA:"الخيار الأول",optionB:"الخيار الثاني",offerBefore:"العرض: قبل الرقم",offerHighlight:"العرض: الجزء الملون",offerAfter:"العرض: بعد الرقم",question:"السؤال",answerDefault:"الإجابة الافتراضية",sendBtn:"زر الإرسال",doneTitle:"عنوان الخطوة الأخيرة",doneSub:"نص تحت العنوان"};
+let t;function changed(){try{localStorage.setItem("cfg_preview",JSON.stringify(cfg))}catch(e){}clearTimeout(t);t=setTimeout(()=>$("frame").contentWindow.location.reload(),400)}
+function mk(group,k,type){const w=document.createElement("div");const l=document.createElement("label");l.textContent=labels[k];const i=document.createElement("input");i.type=type;i.value=cfg[group][k];
+  i.oninput=()=>{cfg[group][k]=i.value;changed()};w.append(l,i);return w}
+Object.keys(cfg.colors).forEach(k=>$("colors").append(mk("colors",k,"color")));
+Object.keys(cfg.texts).forEach(k=>$("texts").append(mk("texts",k,"text")));
+document.querySelectorAll("[data-k]").forEach(i=>{i.value=cfg[i.dataset.k]||"";i.oninput=()=>{cfg[i.dataset.k]=i.value.trim();changed()}});
+const out=()=>"window.SITE_CONFIG = "+JSON.stringify(cfg,null,2)+";\n";
+["gOwner","gRepo","gBranch","gPath","gToken"].forEach(id=>{const v=localStorage.getItem(id);if(v)$(id).value=v;$(id).oninput=()=>localStorage.setItem(id,$(id).value)});
+$("dl").onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([out()],{type:"text/javascript"}));a.download="config.js";a.click()};
+$("reset").onclick=()=>{localStorage.removeItem("cfg_preview");location.reload()};
+$("pub").onclick=async()=>{
+  const m=$("msg"),o=$("gOwner").value.trim(),r=$("gRepo").value.trim(),b=$("gBranch").value.trim()||"main",p=$("gPath").value.trim()||"config.js",tk=$("gToken").value.trim();
+  if(!o||!r||!tk){m.textContent="املأ المستخدم والريبو والتوكن";return}
+  const url=`https://api.github.com/repos/${o}/${r}/contents/${p}`,h={Authorization:"Bearer "+tk,Accept:"application/vnd.github+json"};
+  m.textContent="جاري النشر...";
+  try{
+    let sha;const g=await fetch(url+"?ref="+b,{headers:h});if(g.ok)sha=(await g.json()).sha;
+    const bytes=new TextEncoder().encode(out());let bin="";bytes.forEach(c=>bin+=String.fromCharCode(c));
+    const res=await fetch(url,{method:"PUT",headers:h,body:JSON.stringify({message:"Update config from admin",content:btoa(bin),sha,branch:b})});
+    m.textContent=res.ok?"✅ تم النشر. التغيير يظهر على الموقع خلال دقائق.":"❌ فشل: "+(await res.json()).message;
+  }catch(e){m.textContent="❌ خطأ في الاتصال"}
+};
+</script>
+</body>
+</html>

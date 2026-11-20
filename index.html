@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>هدية ترحيبية</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg1:#fbefd9;--bg2:#d9ece6;--card:#fcfbf6;--ink:#0f3b33;--muted:#6b7f79;--accent:#0b8580;--line:#bfe0d8;--field:#faf6e6}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;color:var(--ink);display:flex;align-items:center;justify-content:center;padding:20px;
+background:radial-gradient(120% 60% at 100% 0%,var(--bg1) 0,transparent 60%),radial-gradient(100% 50% at 0% 100%,var(--bg2) 0,transparent 70%),linear-gradient(180deg,var(--bg1),var(--bg2));background-attachment:fixed}
+.card{width:100%;max-width:420px;background:var(--card);border:1px solid var(--line);border-radius:26px;padding:24px;box-shadow:0 18px 40px rgba(15,59,51,.12)}
+.bar{display:flex;gap:8px;margin-bottom:26px}
+.bar i{flex:1;height:6px;border-radius:9px;background:color-mix(in srgb,var(--accent) 18%,transparent);transition:background .3s}
+.bar i.on{background:var(--accent)}
+h1{font-size:26px;line-height:1.5;margin:0 0 18px;font-weight:700}
+h1 b{color:var(--accent)}
+p{color:var(--muted);margin:0 0 12px}
+input{width:100%;font:inherit;font-size:17px;color:var(--ink);background:var(--field);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px;outline:none;margin-bottom:14px}
+input:focus{border-color:var(--accent)}
+button,a.btn{display:block;width:100%;text-align:center;text-decoration:none;font:inherit;font-size:17px;font-weight:600;color:#fff;background:var(--accent);border:0;border-radius:22px;padding:17px;cursor:pointer}
+button.opt{color:var(--ink);background:var(--field);border:1.5px solid var(--line);margin-bottom:12px}
+button.opt:active,button.opt:focus-visible{border-color:var(--accent)}
+.err{color:#c0392b;font-size:14px;min-height:18px;margin:-6px 0 8px}
+.gift{font-size:44px;text-align:center;margin-bottom:6px}
+.center{text-align:center}
+.hide{display:none}
+</style>
+<script src="config.js"></script>
+<script>/*fallback*/(function(){if(window.SITE_CONFIG)return;
+window.SITE_CONFIG = {
+  "botUsername": "arba777promobot",
+  "metaPixelId": "",
+  "webhook": "",
+  "colors": {
+    "bg1": "#fbefd9", "bg2": "#d9ece6", "card": "#fcfbf6", "ink": "#0f3b33",
+    "muted": "#6b7f79", "accent": "#0b8580", "line": "#bfe0d8", "field": "#faf6e6"
+  },
+  "texts": {
+    "pageTitle": "هدية ترحيبية",
+    "nameTitle": "اسمك إيه؟",
+    "namePlaceholder": "اكتب اسمك هنا",
+    "nextBtn": "التالي",
+    "nameError": "اكتب اسمك من فضلك",
+    "welcome": "أهلاً {name}! اختار هديتك الترحيبية",
+    "optionA": "🎰 بونص كازينو",
+    "optionB": "⚽ بونص سبورت",
+    "offerBefore": "شركة أربح بتقدّم للمشتركين الجداد",
+    "offerHighlight": "200 جنيه",
+    "offerAfter": "هدية",
+    "question": "تحب تستلمها؟",
+    "answerDefault": "نعم",
+    "sendBtn": "إرسال",
+    "doneTitle": "تمام يا {name}!",
+    "doneSub": "دوس على البوت عشان تستلم هديتك"
+  }
+};
+})();</script>
+</head>
+<body>
+<div class="card">
+  <div class="bar" id="bar"><i></i><i></i><i></i><i></i></div>
+  <section id="s1"><h1 id="nameTitle"></h1><input id="name" maxlength="20" autocomplete="given-name"><div class="err" id="err"></div><button id="next1"></button></section>
+  <section id="s2" class="hide"><h1 id="hi"></h1><button class="opt" data-v="a" id="oa"></button><button class="opt" data-v="b" id="ob"></button></section>
+  <section id="s3" class="hide"><h1 id="offer"></h1><p id="q"></p><input id="ans"><button id="send"></button></section>
+  <section id="s4" class="hide center"><div class="gift">🎁</div><h1 id="done"></h1><p id="sub"></p><a class="btn" id="bot" target="_blank" rel="noopener" dir="ltr"></a></section>
+</div>
+<script>
+let C=window.SITE_CONFIG;
+if(location.search.includes("preview")){try{const d=localStorage.getItem("cfg_preview");if(d)C=JSON.parse(d)}catch(e){}}
+const T=C.texts,$=id=>document.getElementById(id),st={name:"",choice:""};
+const r=document.documentElement.style;
+r.setProperty("--bg1",C.colors.bg1);r.setProperty("--bg2",C.colors.bg2);r.setProperty("--card",C.colors.card);r.setProperty("--ink",C.colors.ink);
+r.setProperty("--muted",C.colors.muted);r.setProperty("--accent",C.colors.accent);r.setProperty("--line",C.colors.line);r.setProperty("--field",C.colors.field);
+document.title=T.pageTitle;
+$("nameTitle").textContent=T.nameTitle;$("name").placeholder=T.namePlaceholder;$("next1").textContent=T.nextBtn;
+$("oa").textContent=T.optionA;$("ob").textContent=T.optionB;$("q").textContent=T.question;$("ans").value=T.answerDefault;$("send").textContent=T.sendBtn;$("sub").textContent=T.doneSub;
+const off=$("offer");off.append(T.offerBefore+" ");const hb=document.createElement("b");hb.textContent=T.offerHighlight;off.append(hb," "+T.offerAfter);
+// شريط التقدم: خطوة1=1 ، خطوة2=2 ، خطوة3=4 (مثل التصميم الأصلي)
+const fill=[1,2,4];
+function step(n){["s1","s2","s3","s4"].forEach((s,i)=>$(s).classList.toggle("hide",i!==n-1));
+  $("bar").classList.toggle("hide",n===4);[...$("bar").children].forEach((b,i)=>b.classList.toggle("on",i<fill[n-1]))}
+function b64url(s){const b=new TextEncoder().encode(s);let x="";b.forEach(c=>x+=String.fromCharCode(c));return btoa(x).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}
+if(C.metaPixelId&&!location.search.includes("preview")){!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init",C.metaPixelId);fbq("track","PageView")}
+$("next1").onclick=()=>{const v=$("name").value.trim();if(v.length<2){$("err").textContent=T.nameError;return}
+  st.name=v;$("hi").textContent=T.welcome.replace("{name}",v);step(2)};
+$("name").addEventListener("keydown",e=>{if(e.key==="Enter")$("next1").click()});
+document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{st.choice=b.dataset.v;step(3)});
+$("send").onclick=()=>{
+  $("done").textContent=T.doneTitle.replace("{name}",st.name);
+  const link="https://t.me/"+C.botUsername+"?start="+b64url(st.name)+st.choice;
+  $("bot").href=link;$("bot").textContent="@"+C.botUsername;
+  if(window.fbq)fbq("track","Lead");
+  if(C.webhook){try{fetch(C.webhook,{method:"POST",mode:"no-cors",body:JSON.stringify({name:st.name,choice:st.choice,answer:$("ans").value,t:Date.now()})})}catch(e){}}
+  step(4)};
+step(1);
+</script>
+</body>
+</html>
