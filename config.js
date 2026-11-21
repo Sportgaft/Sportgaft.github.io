@@ -36,5 +36,5 @@ window.SITE_CONFIG = {
     "sendBtn": "إرسال",
     "doneTitle": "تمام يا {name}!"
   },
-  "supportUsername": "SOOED1"
+  "supportUsername": "CASN5"
 };
